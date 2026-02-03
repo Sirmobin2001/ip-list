@@ -1,0 +1,2 @@
+vless://6bf0872b-892d-4052-9ecf-fe2ad8a42e3f@nima.nscl.ir:443?encryption=none&security=tls&sni=hell.mobinshahidiclash.workers.dev&fp=randomized&insecure=1&allowInsecure=1&type=ws&host=hell.mobinshahidiclash.workers.dev&path=%2F%3Fed%3D2048#Config_1
+vless://6bf0872b-892d-4052-9ecf-fe2ad8a42e3f@bpb.yousef.isegaro.com:443?encryption=none&security=tls&sni=hell.mobinshahidiclash.workers.dev&fp=randomized&insecure=1&allowInsecure=1&type=ws&host=hell.mobinshahidiclash.workers.dev&path=%2F%3Fed%3D2048#Config_2
