@@ -1,49 +1,36 @@
-import urllib.parse
-import socket
+name: Update Configs
 
-# لیست دامنه‌هایی که IPهای فعال پشت‌شان هست
-DOMAINS = ["nima.nscl.ir", "bpb.yousef.isegaro.com"]
+on:
+  schedule:
+    - cron: "0 */6 * * *" # هر ۶ ساعت اجرا می‌شود
+  workflow_dispatch: # دکمه اجرای دستی در تب Actions
 
-# کانفیگ پایه
-BASE_CONFIG = "vless://6bf0872b-892d-4052-9ecf-fe2ad8a42e3f@hell.mobinshahidiclash.workers.dev:443?encryption=none&security=tls&sni=hell.mobinshahidiclash.workers.dev&fp=randomized&insecure=1&allowInsecure=1&type=ws&host=hell.mobinshahidiclash.workers.dev&path=%2F%3Fed%3D2048"
+permissions:
+  contents: write
 
-def get_ips(domain):
-    try:
-        # استخراج تمام IPهای مرتبط با دامنه
-        data = socket.getaddrinfo(domain, 80)
-        return list(set([item[4][0] for item in data]))
-    except Exception as e:
-        print(f"Error resolving {domain}: {e}")
-        return []
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-def main():
-    final_configs = []
-    parsed_url = urllib.parse.urlparse(BASE_CONFIG)
-    query_params = urllib.parse.parse_qs(parsed_url.query)
-    
-    for domain in DOMAINS:
-        ips = get_ips(domain)
-        print(f"Found {len(ips)} IPs for {domain}")
-        
-        for ip in ips:
-            # ساخت کانفیگ جدید با استفاده از IP به جای دامنه در بخش آدرس
-            netloc = f"{parsed_url.username}@{ip}:{parsed_url.port}"
-            
-            # در اینجا SNI و Host ثابت می‌مانند تا اتصال به ورکر برقرار شود
-            new_config = urllib.parse.urlunparse((
-                parsed_url.scheme,
-                netloc,
-                parsed_url.path,
-                parsed_url.params,
-                urllib.parse.urlencode(query_params, doseq=True),
-                f"IP_{ip}_from_{domain}" # نام کانفیگ حاوی IP
-            ))
-            final_configs.append(new_config)
-    
-    # ذخیره تمام کانفیگ‌های تولید شده
-    with open("sub.txt", "w") as f:
-        f.write("\n".join(final_configs))
-    print(f"Total configs generated: {len(final_configs)}")
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-if __name__ == "__main__":
-    main()
+      - name: Run Generator Script
+        run: python generate.py
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add sub.txt
+          if git diff --staged --quiet; then
+            echo "No changes detected in IPs."
+          else
+            git commit -m "Automated update: New IPs resolved"
+            git push
+          fi
