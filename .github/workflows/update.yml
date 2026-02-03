@@ -1,0 +1,29 @@
+name: Update Configs
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # هر ۶ ساعت یکبار اجرا می‌شود
+  workflow_dispatch: # امکان اجرای دستی را هم می‌دهد
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Run script
+        run: python generate.py
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add sub.txt
+          git commit -m "Update configs with new IPs" || exit 0
+          git push
