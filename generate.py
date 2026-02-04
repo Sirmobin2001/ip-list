@@ -8,7 +8,7 @@ DOMAINS = ["nima.nscl.ir", "bpb.yousef.isegaro.com"]
 PORTS = [443, 2087, 2096, 8443, 2053]
 
 # کانفیگ پایه
-BASE_CONFIG = "vless://6bf0872b-892d-4052-9ecf-fe2ad8a42e3f@hell.mobinshahidiclash.workers.dev:443?encryption=none&security=tls&sni=hell.mobinshahidiclash.workers.dev&fp=randomized&insecure=1&allowInsecure=1&type=ws&host=hell.mobinshahidiclash.workers.dev&path=%2F%3Fed%3D2048"
+BASE_CONFIG = "vless://4cff3b20-52e7-4bc1-83a4-3576392a4d70@hell.mobinshahidiclash.workers.dev:443?encryption=none&security=tls&sni=hell.mobinshahidiclash.workers.dev&fp=randomized&insecure=1&allowInsecure=1&type=ws&host=hell.mobinshahidiclash.workers.dev&path=%2F%3Fed%3D2048"
 
 def get_ips(domain):
     try:
