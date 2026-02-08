@@ -12,22 +12,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4  # این خط بسیار حیاتی است
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
       - name: Run script
-        run: python config_generator.py
-      
+        run: python config_generator.py # نام فایل باید دقیقاً همین باشد
+
       - name: Commit and Push
         run: |
-         git config --global user.name "github-actions[bot]"
-         git config --global user.email "github-actions[bot]@users.noreply.github.com"
-         git add *_nodes.txt
-         # این خط از خطای 128 در صورتی که تغییری نباشد جلوگیری می‌کند
-         git commit -m "Update configs" || exit 0
-         git push origin main
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add *.txt
+          git commit -m "Update nodes" || exit 0
+          git push
+
