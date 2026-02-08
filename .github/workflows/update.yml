@@ -2,7 +2,7 @@ name: Update Configs
 
 on:
   schedule:
-    - cron: "0 */6 * * *" # هر ۶ ساعت اجرا می‌شود
+    - cron: "0 */23 * * *" # هر ۶ ساعت اجرا می‌شود
   workflow_dispatch: # دکمه اجرای دستی در تب Actions
 
 permissions:
