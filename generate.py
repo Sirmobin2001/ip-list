@@ -5,7 +5,7 @@ import socket
 DOMAINS = ["nima.nscl.ir", "bpb.yousef.isegaro.com"]
 
 # پورت‌های مورد نظر
-PORTS = [443, 2087, 2096, 8443, 2053]
+PORTS = [443, 8443]
 
 # کانفیگ پایه
 BASE_CONFIG = "vless://4cff3b20-52e7-4bc1-83a4-3576392a4d70@hell.mobinshahidiclash.workers.dev:443?encryption=none&security=tls&sni=hell.mobinshahidiclash.workers.dev&fp=qq&insecure=1&allowInsecure=1&type=ws&host=hell.mobinshahidiclash.workers.dev&path=%2F%3Fed%3D2048#%E5%8E%9F%E7%94%9F%E5%9C%B0%E5%9D%80-443-WS-TLS
