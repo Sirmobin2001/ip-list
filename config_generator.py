@@ -24,7 +24,7 @@ def main():
     parsed_url = urllib.parse.urlparse(BASE_CONFIG)
     query_params = urllib.parse.parse_qs(parsed_url.query)
     
-    # برای اطمینان از دیده شدن فایل‌ها توسط گیت، آن‌ها را مستقیم در پوشه جاری می‌سازیم
+    # پردازش دامنه‌ها
     for domain in DOMAINS:
         domain_configs = []
         ips = get_ips(domain)
@@ -34,7 +34,9 @@ def main():
         for ip in ips:
             for port in PORTS:
                 netloc = f"{parsed_url.username}@{ip}:{port}"
-                node_name = f"{domain}-{ip}-{port}"
+                # برچسب زدن برای نام نود
+                node_label = "nima" if "nima" in domain else "bpb"
+                node_name = f"{node_label}-{ip}"
                 
                 new_config = urllib.parse.urlunparse((
                     parsed_url.scheme,
@@ -47,11 +49,17 @@ def main():
                 domain_configs.append(new_config)
         
         if domain_configs:
-            # نام فایل را بر اساس نیاز شما تنظیم کردیم
-            file_name = f"{domain.split('.')[0]}_nodes.txt"
+            # ایجاد نام فایل بر اساس درخواست شما
+            if "nima" in domain:
+                file_name = "nima_nodes.txt"
+            elif "bpb" in domain:
+                file_name = "bpb_nodes.txt"
+            else:
+                file_name = f"{domain.split('.')[0]}_nodes.txt"
+                
             with open(file_name, "w", encoding="utf-8") as f:
                 f.write("\n".join(domain_configs))
-            print(f"فایل {file_name} ساخته شد.")
+            print(f"فایل {file_name} با موفقیت در مسیر {os.getcwd()} ذخیره شد.")
 
 if __name__ == "__main__":
     main()
