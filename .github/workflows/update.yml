@@ -2,7 +2,7 @@ name: Update Configs
 
 on:
   schedule:
-    - cron: "0 */23 * * *" # هر ۶ ساعت اجرا می‌شود
+    - cron: "0 */23 * * *" 
   workflow_dispatch: # دکمه اجرای دستی در تب Actions
 
 permissions:
@@ -20,13 +20,14 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Run Generator Script
-        run: python generate.py
-
-      - name: Commit and Push changes
+      - name: Run script
+        run: python generator.py
+      
+      - name: Commit and Push
         run: |
-         git config --local user.email "action@github.com"
-         git config --local user.name "GitHub Action"
-         git add configs/*.txt
-         git commit -m "Update configs $(date)" || echo "No changes to commit"
-         git push
+         git config --global user.name "github-actions[bot]"
+         git config --global user.email "github-actions[bot]@users.noreply.github.com"
+         git add *_nodes.txt
+         # این خط از خطای 128 در صورتی که تغییری نباشد جلوگیری می‌کند
+         git commit -m "Update configs" || exit 0
+         git push origin main
