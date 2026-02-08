@@ -14,33 +14,28 @@ BASE_CONFIG = "vless://4cff3b20-52e7-4bc1-83a4-3576392a4d70@hell.mobinshahidicla
 def get_ips(domain):
     """تبدیل دامنه به لیست آی‌پی‌های فعال"""
     try:
-        # دریافت اطلاعات آدرس (IPv4)
         data = socket.getaddrinfo(domain, 80, socket.AF_INET)
-        # استخراج آی‌پی‌های منحصر به فرد
         return list(set([item[4][0] for item in data]))
     except Exception as e:
-        print(f"خطا در یافتن آی‌پی برای دامنه {domain}: {e}")
+        print(f"خطا در یافتن آی‌پی برای {domain}: {e}")
         return []
 
 def main():
     parsed_url = urllib.parse.urlparse(BASE_CONFIG)
     query_params = urllib.parse.parse_qs(parsed_url.query)
     
+    # برای اطمینان از دیده شدن فایل‌ها توسط گیت، آن‌ها را مستقیم در پوشه جاری می‌سازیم
     for domain in DOMAINS:
         domain_configs = []
         ips = get_ips(domain)
         
-        print(f"تعداد {len(ips)} آی‌پی برای دامنه {domain} پیدا شد.")
+        print(f"تعداد {len(ips)} آی‌پی برای {domain} یافت شد.")
         
         for ip in ips:
             for port in PORTS:
-                # ساخت بخش netloc جدید (user@ip:port)
                 netloc = f"{parsed_url.username}@{ip}:{port}"
-                
-                # نام‌گذاری نود بر اساس دامنه و آی‌پی
                 node_name = f"{domain}-{ip}-{port}"
                 
-                # بازسازی کامل لینک vless
                 new_config = urllib.parse.urlunparse((
                     parsed_url.scheme,
                     netloc,
@@ -51,14 +46,12 @@ def main():
                 ))
                 domain_configs.append(new_config)
         
-        # ذخیره کانفیگ‌های هر دامنه در فایل جداگانه
         if domain_configs:
-            file_name = f"{domain}.txt"
+            # نام فایل را بر اساس نیاز شما تنظیم کردیم
+            file_name = f"{domain.split('.')[0]}_nodes.txt"
             with open(file_name, "w", encoding="utf-8") as f:
                 f.write("\n".join(domain_configs))
-            print(f"فایل {file_name} با {len(domain_configs)} کانفیگ ساخته شد.")
-        else:
-            print(f"برای دامنه {domain} هیچ کانفیگی ساخته نشد.")
+            print(f"فایل {file_name} ساخته شد.")
 
 if __name__ == "__main__":
     main()
